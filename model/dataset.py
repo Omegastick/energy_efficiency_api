@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Utilities for downloading and processing the UCI Energy Efficiency Dataset
 2012.
@@ -10,7 +9,6 @@ from typing import Tuple
 
 import pandas
 import numpy as np
-from sklearn.model_selection import train_test_split
 import torch
 
 TRAIN_FILENAME = 'energy_efficiency_2012_train.csv'
@@ -28,10 +26,20 @@ def download_data(url: str, train_path: str, test_path: str):
         train_path: Path at which to store the training data.
         test_path: Path at which to store the test data.
     """
-    Path(train_path).parent.mkdir()
+    print(f"Downloading dataset from {url}")
+    Path(train_path).parent.mkdir(exist_ok=True)
     response = urllib.request.urlopen(url)
     data_frame = pandas.read_excel(response)
-    train, test = train_test_split(data_frame, test_size=0.1)
+
+    # It looks like the first 48 rows of the dataset are intended to be a test
+    # set.
+    # We can't use a typical shuffled train-test split because each row isn't
+    # independent from its neighbours.
+    # This is why the model we have doesn't *appear* to do as well as other
+    # models on the internet, whereas infact it will generalize better.
+    test = data_frame.iloc[:48]
+    train = data_frame.iloc[48:]
+
     train.to_csv(train_path)
     test.to_csv(test_path)
 
@@ -78,10 +86,8 @@ class EnergyEfficiencyDataset(torch.utils.data.Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        features = self.dataframe.iloc[idx, :8]
-        targets = self.dataframe.iloc[idx, 8:10]
-        features = np.array([features])
-        targets = np.array([targets])
+        features = self.dataframe.iloc[idx, 1:9].to_numpy(dtype=np.float32)
+        targets = self.dataframe.iloc[idx, 9:11].to_numpy(dtype=np.float32)
 
         if self.transform:
             features = self.transform(features)

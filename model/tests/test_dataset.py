@@ -1,6 +1,7 @@
 """
 Tests for dataset.py.
 """
+import numpy as np
 import pytest
 
 import model.dataset
@@ -46,3 +47,13 @@ def test_transform_is_applied():
                                                     train=False,
                                                     transform=lambda _: 0)
     assert dataset[0][0] == 0
+
+
+def test__data_is_float():
+    """
+    When data is fetched from the dataset, it should be in 32-bit float format.
+    """
+    dataset = model.dataset.EnergyEfficiencyDataset('/tmp', train=False)
+    data = dataset[0]
+    assert data[0].dtype == np.float32
+    assert data[1].dtype == np.float32
