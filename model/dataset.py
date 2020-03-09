@@ -29,7 +29,7 @@ def download_data(url: str, train_path: str, test_path: str):
     print(f"Downloading dataset from {url}")
     Path(train_path).parent.mkdir(exist_ok=True)
     response = urllib.request.urlopen(url)
-    data_frame = pandas.read_excel(response)
+    data_frame = pandas.read_excel(response.read())
 
     # It looks like the first 48 rows of the dataset are intended to be a test
     # set.

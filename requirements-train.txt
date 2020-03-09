@@ -1,0 +1,5 @@
+numpy==1.18.1
+pandas==1.0.1
+pytest
+torch==1.4.0
+xlrd==1.2.0

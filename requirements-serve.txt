@@ -1,2 +1,4 @@
 flask==1.1.1
+numpy==1.18.1
+pytest
 torch==1.4.0

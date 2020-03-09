@@ -63,7 +63,7 @@ def run_training():
                         help="batch size on which to train the model")
     parser.add_argument('--data_dir', type=str, default='data',
                         help="directory in which to store the data")
-    parser.add_argument('--epochs', type=int, default=20,
+    parser.add_argument('--epochs', type=int, default=200,
                         help="how many epochs to train the model")
     parser.add_argument('--early_stopping', type=int, default=5,
                         help=("how many epochs with no improvements to wait "
