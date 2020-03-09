@@ -3,7 +3,7 @@
 Run a development server for the application.
 """
 
-import server
+from server import app
 
 if __name__ == '__main__':
-    server.app.run()
+    app.run(host='0.0.0.0')

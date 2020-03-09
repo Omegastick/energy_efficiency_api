@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  app:
+    build: .
+    volumes:
+      - type: bind
+        source: ${MODEL_PATH}
+        target: /model.pt
+    environment:
+      MODEL_PATH: /model.pt
+
+  nginx:
+    image: nginx:mainline-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    ports:
+      - 80:80
