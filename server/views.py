@@ -23,6 +23,8 @@ def main():
         inputs = np.array(inputs, dtype=np.float32)
     except TypeError:
         abort(400, "Input must be a valid JSON matrix")
+    except ValueError:
+        abort(400, "Input must be a non-jagged matrix")
     if len(inputs.shape) > 2:
         abort(400, "Input must be a matrix of 2 or fewer dimensions")
     if inputs.shape[-1] != 8:
