@@ -4,7 +4,6 @@ Utilities for downloading and processing the UCI Energy Efficiency Dataset
 """
 
 from pathlib import Path
-import urllib
 from typing import Tuple
 
 import pandas
@@ -27,9 +26,7 @@ def download_data(url: str, train_path: str, test_path: str):
         test_path: Path at which to store the test data.
     """
     print(f"Downloading dataset from {url}")
-    Path(train_path).parent.mkdir(exist_ok=True)
-    response = urllib.request.urlopen(url)
-    data_frame = pandas.read_excel(response.read())
+    data_frame = pandas.read_excel(url)
 
     # It looks like the first 48 rows of the dataset are intended to be a test
     # set.
